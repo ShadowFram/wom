@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "worldofmurloc",
+  "version": "${version}",
+  "name": "WorldOfMurloc",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/worldofmurloc/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-datagen": [
+      "org.plugin.worldofmurloc.client.WorldofmurlocDataGenerator"
+    ],
+    "client": [
+      "org.plugin.worldofmurloc.client.WorldofmurlocClient"
+    ],
+    "main": [
+      "org.plugin.worldofmurloc.Worldofmurloc"
+    ],
+    "cardinal-components": [
+      "org.plugin.worldofmurloc.ModComponents"
+    ]
+  },
+  "custom": {
+    "cardinal-components": [
+      "wom:playerdata"
+    ]
+  },
+  "mixins": [
+    "worldofmurloc.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
