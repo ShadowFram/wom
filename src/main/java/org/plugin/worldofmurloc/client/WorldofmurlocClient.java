@@ -4,12 +4,12 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderTickCounter;
-import org.plugin.worldofmurloc.ExperienceBarHud;
+import org.plugin.worldofmurloc.ModHuds;
 
 public class WorldofmurlocClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        HudRenderCallback.EVENT.register(new ExperienceBarHud());
+        HudRenderCallback.EVENT.register(new ModHuds());
     }
 }
