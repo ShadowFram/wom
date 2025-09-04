@@ -6,14 +6,15 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import org.plugin.worldofmurloc.AbilityHudMod;
 import org.plugin.worldofmurloc.ModComponents;
+import org.plugin.worldofmurloc.client.WorldofmurlocClient;
 import org.plugin.worldofmurloc.component.PlayerComponent;
 
 public class InputHandler {
     public static void register() {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (client.player != null) {
-                for (int i = 0; i < AbilityHudMod.ABILITY_KEYS.length; i++) {
-                    if (AbilityHudMod.ABILITY_KEYS[i].wasPressed()) {
+                for (int i = 0; i < WorldofmurlocClient.ABILITY_KEYS.length; i++) {
+                    if (WorldofmurlocClient.ABILITY_KEYS[i].wasPressed()) {
                         handleAbilityUse(i, client.player);
                     }
                 }
