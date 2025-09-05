@@ -1,14 +1,10 @@
 package org.plugin.worldofmurloc.client;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.render.RenderTickCounter;
-import net.minecraft.client.util.InputUtil;
-import org.plugin.worldofmurloc.InputHandler;
-import org.plugin.worldofmurloc.ModHuds;
+import org.plugin.worldofmurloc.util.XpHudState;
 
 public class WorldofmurlocClient implements ClientModInitializer {
     public static final KeyBinding[] ABILITY_KEYS = new KeyBinding[6];
@@ -16,6 +12,9 @@ public class WorldofmurlocClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         HudRenderCallback.EVENT.register(new ModHud());
+        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            XpHudState.tick();
+        });
 //        for (int i = 0; i < 6; i++) {
 //            ABILITY_KEYS[i] = KeyBindingHelper.registerKeyBinding(new KeyBinding(
 //                    "key.ability." + i,

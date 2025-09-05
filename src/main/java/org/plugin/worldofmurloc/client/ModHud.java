@@ -1,9 +1,9 @@
 package org.plugin.worldofmurloc.client;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
@@ -11,8 +11,12 @@ import org.plugin.worldofmurloc.ModComponents;
 import org.plugin.worldofmurloc.component.PlayerComponent;
 
 public class ModHud implements HudRenderCallback {
+    int screenWidth;
+    int screenHeight;
     @Override
     public void onHudRender(DrawContext drawContext, RenderTickCounter renderTickCounter) {
+        screenHeight = drawContext.getScaledWindowHeight();
+        screenWidth = drawContext.getScaledWindowWidth();
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.player == null) return;
         if (client.options.hudHidden) return;
@@ -21,12 +25,11 @@ public class ModHud implements HudRenderCallback {
 
         renderExperienceBar(drawContext, component, client);
         renderPlayerAndLevel(drawContext, component, client);
+        renderAbilityHotbar(drawContext, component);
 
     }
 
-    private void renderExperienceBar(DrawContext context, PlayerComponent component, MinecraftClient client) {
-        int screenWidth = context.getScaledWindowWidth();
-        int screenHeight = context.getScaledWindowHeight();
+    public void renderExperienceBar(DrawContext context, PlayerComponent component, MinecraftClient client) {
         int barWidth = 182;
         int barHeight = 5;
         int barX = (screenWidth - barWidth) / 2;
@@ -50,8 +53,6 @@ public class ModHud implements HudRenderCallback {
     }
 
     private void renderPlayerAndLevel(DrawContext context, PlayerComponent component, MinecraftClient client) {
-        int playerIconX = 8;
-        int playerIconY = 8;
         String lvlText = "" + component.getLvl();
         int padding = 2;
         int textWidth = client.textRenderer.getWidth(lvlText);
@@ -71,5 +72,19 @@ public class ModHud implements HudRenderCallback {
                 client.textRenderer, lvlText,
                 25, 28, 0xFFFFFF, true
         );
+    }
+
+    private void renderAbilityHotbar(DrawContext context, PlayerComponent component) {
+        int leftX = (screenWidth - 315) / 2;
+        int rightX = (screenWidth + 186) / 2;
+        int y = screenHeight - 22;
+        // TODO: Текстуру поменять + подправить положение (я плох с циферками)
+        Identifier HOTBAR_ID = Identifier.ofVanilla("textures/gui/sprites/hud/hotbar.png");
+        RenderSystem.enableBlend();
+        // Левая сторона
+        context.drawTexture(HOTBAR_ID, leftX, y, 64, 23, 0, 0, 22, 22, 66, 22);
+        // Правая сторона
+        context.drawTexture(HOTBAR_ID, rightX, y, 64, 23, 0, 0, 22, 22, 66, 22);
+        RenderSystem.disableBlend(); // Нужно для прозрачности (наверн)
     }
 }

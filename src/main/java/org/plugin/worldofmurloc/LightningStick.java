@@ -11,7 +11,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.plugin.worldofmurloc.component.PlayerComponent;
 
 public class LightningStick extends Item {
 	public LightningStick(Settings settings) {

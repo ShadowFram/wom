@@ -1,14 +1,8 @@
 package org.plugin.worldofmurloc;
 
-import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import org.plugin.worldofmurloc.commands.XpSystemCommands;
-import org.plugin.worldofmurloc.component.PlayerComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -4,8 +4,6 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import org.plugin.worldofmurloc.AbilityHudMod;
-import org.plugin.worldofmurloc.ModComponents;
 import org.plugin.worldofmurloc.client.WorldofmurlocClient;
 import org.plugin.worldofmurloc.component.PlayerComponent;
 
