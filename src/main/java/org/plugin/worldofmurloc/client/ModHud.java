@@ -52,7 +52,7 @@ public class ModHud implements HudRenderCallback {
     private void renderPlayerAndLevel(DrawContext context, PlayerComponent component, MinecraftClient client) {
         int playerIconX = 8;
         int playerIconY = 8;
-        String lvlText = "lvl: " + component.getLvl();
+        String lvlText = "" + component.getLvl();
         int padding = 2;
         int textWidth = client.textRenderer.getWidth(lvlText);
         assert client.player != null;
@@ -61,15 +61,15 @@ public class ModHud implements HudRenderCallback {
 
         // Фон
         context.fill(
-                10, 38 + padding,
-                10 + textWidth + padding, 38 + client.textRenderer.fontHeight + padding,
+                24, 25 + padding,
+                24 + textWidth + padding, 26 + client.textRenderer.fontHeight + padding,
                 0x80000000
         );
 
         // Текст
         context.drawText(
                 client.textRenderer, lvlText,
-                10, 38, 0xFFFFFF, true
+                25, 28, 0xFFFFFF, true
         );
     }
 }
