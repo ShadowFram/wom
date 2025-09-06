@@ -3,11 +3,13 @@ package org.plugin.worldofmurloc.client;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import org.plugin.worldofmurloc.ModComponents;
+import org.plugin.worldofmurloc.Worldofmurloc;
 import org.plugin.worldofmurloc.component.PlayerComponent;
 
 public class ModHud implements HudRenderCallback {
@@ -23,13 +25,13 @@ public class ModHud implements HudRenderCallback {
 
         var component = ModComponents.WOMDATA.get(client.player);
 
-        renderExperienceBar(drawContext, component, client);
+        renderExperienceBar(drawContext, component, client.textRenderer);
         renderPlayerAndLevel(drawContext, component, client);
-        renderAbilityHotbar(drawContext, component);
+        renderAbilityHotbar(drawContext, component, client.textRenderer);
 
     }
 
-    public void renderExperienceBar(DrawContext context, PlayerComponent component, MinecraftClient client) {
+    public void renderExperienceBar(DrawContext context, PlayerComponent component, TextRenderer textRenderer) {
         int barWidth = 182;
         int barHeight = 5;
         int barX = (screenWidth - barWidth) / 2;
@@ -45,8 +47,8 @@ public class ModHud implements HudRenderCallback {
 
         String text = component.getXp() + "/" + component.getXpForNewLevel();
         context.drawText(
-                client.textRenderer, text,
-                barX + barWidth / 2 - client.textRenderer.getWidth(text) / 2,
+                textRenderer, text,
+                barX + barWidth / 2 - textRenderer.getWidth(text) / 2,
                 barY - 3, 0xFFFFFF, true
         );
 
@@ -74,10 +76,10 @@ public class ModHud implements HudRenderCallback {
         );
     }
 
-    private void renderAbilityHotbar(DrawContext context, PlayerComponent component) {
+    private void renderAbilityHotbar(DrawContext context, PlayerComponent component, TextRenderer textRenderer) {
+        int y = Worldofmurloc.CONFIG.abilityOnRight() ? screenHeight - 22 : 0;
         int leftX = (screenWidth - 315) / 2;
         int rightX = (screenWidth + 186) / 2;
-        int y = screenHeight - 22;
         // TODO: Текстуру поменять + подправить положение (я плох с циферками)
         Identifier HOTBAR_ID = Identifier.ofVanilla("textures/gui/sprites/hud/hotbar.png");
         RenderSystem.enableBlend();

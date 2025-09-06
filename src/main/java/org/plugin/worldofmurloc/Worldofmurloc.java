@@ -9,12 +9,12 @@ import org.slf4j.LoggerFactory;
 public class Worldofmurloc implements ModInitializer {
     public static final String MOD_ID = "wom";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+    public static final org.plugin.worldofmurloc.ModConfig CONFIG = org.plugin.worldofmurloc.ModConfig.createAndLoad();
 
     @Override
     public void onInitialize() {
         // Инициализация всех систем мода
         ModItems.initialize();
-        ModBlocks.initialize();
         DieForXp.register();
 
         CommandRegistrationCallback.EVENT.register(((dispatcher,

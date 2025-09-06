@@ -7,9 +7,11 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.registry.RegistryWrapper;
 import org.ladysnake.cca.api.v3.component.Component;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
+import org.ladysnake.cca.api.v3.component.tick.CommonTickingComponent;
 import org.plugin.worldofmurloc.ModComponents;
 
-interface PlayerDataComponent extends Component {
+interface PlayerDataComponent extends Component, CommonTickingComponent {
+    // TODO: Почистить неиспользуемые методы
     // XP и уровни
     void setXp(int amount);
     int getXp();
@@ -185,5 +187,10 @@ public class PlayerComponent implements PlayerDataComponent, AutoSyncedComponent
     @Override
     public boolean shouldSyncWith(ServerPlayerEntity player) {
         return this.player == player;
+    }
+
+    @Override
+    public void tick() {
+
     }
 }
