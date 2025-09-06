@@ -4,8 +4,10 @@
   "package": "org.plugin.worldofmurloc.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "PlayerEntityMixin"
   ],
   "client": [
+    "ExperienceBarMixin"
   ],
   "injectors": {
     "defaultRequire": 1
