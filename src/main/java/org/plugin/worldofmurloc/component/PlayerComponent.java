@@ -2,7 +2,6 @@ package org.plugin.worldofmurloc.component;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.registry.RegistryWrapper;
 import org.ladysnake.cca.api.v3.component.Component;
@@ -11,7 +10,6 @@ import org.ladysnake.cca.api.v3.component.tick.CommonTickingComponent;
 import org.plugin.worldofmurloc.ModComponents;
 
 interface PlayerDataComponent extends Component, CommonTickingComponent {
-    // TODO: Почистить неиспользуемые методы
     // XP и уровни
     void setXp(int amount);
     int getXp();
@@ -19,7 +17,6 @@ interface PlayerDataComponent extends Component, CommonTickingComponent {
     void setLvl(int amount);
     void addXp(int amount);
     int getXpForNewLevel();
-    void levelUp();
 
     // Мана
     void setMana(float amount);
@@ -29,10 +26,6 @@ interface PlayerDataComponent extends Component, CommonTickingComponent {
     void consumeMana(float amount);
     boolean hasEnoughMana(float amount);
     void regenerateMana();
-
-    void sync(ServerPlayerEntity player);
-    void writeSyncPacket(PacketByteBuf buf, ServerPlayerEntity recipient);
-    void applySyncPacket(PacketByteBuf buf);
 }
 
 public class PlayerComponent implements PlayerDataComponent, AutoSyncedComponent {
@@ -50,7 +43,7 @@ public class PlayerComponent implements PlayerDataComponent, AutoSyncedComponent
     @Override
     public void setXp(int amount) {
         this.xp = amount;
-        sync();
+        ModComponents.WOMDATA.sync(player);
     }
 
     @Override
@@ -67,14 +60,14 @@ public class PlayerComponent implements PlayerDataComponent, AutoSyncedComponent
     public void setLvl(int amount) {
         this.level = amount;
         this.maxMana = calculateMaxMana(); // Обновляем ману при изменении уровня
-        sync();
+        ModComponents.WOMDATA.sync(player);
     }
 
     @Override
     public void addXp(int amount) {
         this.xp += amount;
         levelUp();
-        sync();
+        ModComponents.WOMDATA.sync(player);
     }
 
     @Override
@@ -83,8 +76,7 @@ public class PlayerComponent implements PlayerDataComponent, AutoSyncedComponent
         return (int)(100 * Math.pow(1.2, level - 1));
     }
 
-    @Override
-    public void levelUp() {
+    private void levelUp() {
         while (this.xp >= getXpForNewLevel()) {
             this.xp -= getXpForNewLevel();
             this.level++;
@@ -97,7 +89,7 @@ public class PlayerComponent implements PlayerDataComponent, AutoSyncedComponent
     @Override
     public void setMana(float amount) {
         this.mana = Math.min(Math.max(amount, 0), this.maxMana);
-        sync();
+        ModComponents.WOMDATA.sync(player);
     }
 
     @Override
@@ -138,18 +130,6 @@ public class PlayerComponent implements PlayerDataComponent, AutoSyncedComponent
         return 100.0f + (level - 1) * 20.0f;
     }
 
-    // Синхронизация
-    @Override
-    public void sync(ServerPlayerEntity player) {
-        ModComponents.WOMDATA.sync(player);
-    }
-
-    private void sync() {
-        if (player instanceof ServerPlayerEntity serverPlayer) {
-            sync(serverPlayer);
-        }
-    }
-
     // NBT
     @Override
     public void readFromNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
@@ -165,23 +145,6 @@ public class PlayerComponent implements PlayerDataComponent, AutoSyncedComponent
         tag.putInt("level", this.level);
         tag.putFloat("mana", this.mana);
         tag.putFloat("maxMana", this.maxMana);
-    }
-
-    // Сетевая синхронизация
-    @Override
-    public void writeSyncPacket(PacketByteBuf buf, ServerPlayerEntity recipient) {
-        buf.writeInt(this.xp);
-        buf.writeInt(this.level);
-        buf.writeFloat(this.mana);
-        buf.writeFloat(this.maxMana);
-    }
-
-    @Override
-    public void applySyncPacket(PacketByteBuf buf) {
-        this.xp = buf.readInt();
-        this.level = buf.readInt();
-        this.mana = buf.readFloat();
-        this.maxMana = buf.readFloat();
     }
 
     @Override

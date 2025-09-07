@@ -22,7 +22,6 @@ public class DieForXp {
                 var player = ModComponents.WOMDATA.get(playerEntity);
                 // Проверяем теги моба
                 if (entity.getType().isIn(XP10_TAG)) {
-                    // TODO: Заменить на обычные компоненты
                     player.addXp(10);
                     playerEntity.sendMessage(Text.literal("+10 XP за убийство ").append(entity.getName()), false);
                 }

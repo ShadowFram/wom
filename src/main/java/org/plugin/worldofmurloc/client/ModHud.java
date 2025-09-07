@@ -25,13 +25,17 @@ public class ModHud implements HudRenderCallback {
 
         var component = ModComponents.WOMDATA.get(client.player);
 
-        renderExperienceBar(drawContext, component, client.textRenderer);
+//        renderExperienceBar(drawContext, component, client.textRenderer);
         renderPlayerAndLevel(drawContext, component, client);
         renderAbilityHotbar(drawContext, component, client.textRenderer);
 
     }
 
     public void renderExperienceBar(DrawContext context, PlayerComponent component, TextRenderer textRenderer) {
+        renderExperienceBar(context, component, textRenderer, screenWidth, screenHeight);
+    }
+
+    public static void renderExperienceBar(DrawContext context, PlayerComponent component, TextRenderer textRenderer, int screenWidth, int screenHeight) {
         int barWidth = 182;
         int barHeight = 5;
         int barX = (screenWidth - barWidth) / 2;
@@ -88,5 +92,42 @@ public class ModHud implements HudRenderCallback {
         // Правая сторона
         context.drawTexture(HOTBAR_ID, rightX, y, 64, 23, 0, 0, 22, 22, 66, 22);
         RenderSystem.disableBlend(); // Нужно для прозрачности (наверн)
+    }
+
+    public static void renderHealthBar(DrawContext context, MinecraftClient client, float maxHealth, float currentHealth) {
+        int width = 100;
+        int height = 11;
+        int x = 40;
+        int y = 11;
+        // Вычисляем соотношение текущего здоровья к максимальному
+        float ratio = MathHelper.clamp(currentHealth / maxHealth, 0.0F, 1.0F);
+
+        // Вычисляем ширину заполненной части
+        int filledWidth = (int)(width * ratio);
+
+        context.fill(x, y, x + width, y + height, 0xFF7F7F7F); // Фон
+        context.fill(x, y, x + filledWidth, y + height, 0xFFFC2525); // Заполнение
+
+        String healthText = String.format("%d/%d", (int) currentHealth, (int) maxHealth);
+        context.drawText(client.textRenderer, healthText, x + width + 5, y, 0xFFFFFF, true);
+    }
+
+    public static void renderHungerBar(DrawContext context, MinecraftClient client, float currentHunger) {
+        //Todo: Разобрать процесс создания прогресса заполнения и наконец сделать нормальное отображение
+        int width = 100;
+        int height = 11;
+        int x = 40;
+        int y = 26;
+        // Вычисляем соотношение текущего здоровья к максимальному
+        float ratio = MathHelper.clamp(currentHunger / 20, 0.0F, 1.0F);
+
+        // Вычисляем ширину заполненной части
+        int filledWidth = (int)(width * ratio);
+
+        context.fill(x, y, x + width, y + height, 0xFF7F7F7F); // Фон
+        context.fill(x, y, x + filledWidth, y + height, 0xFFB7721F); // Заполнение
+
+        String healthText = String.format("%d/%d", (int) currentHunger, 20);
+        context.drawText(client.textRenderer, healthText, x + width + 5, y, 0xFFFFFF, true);
     }
 }
