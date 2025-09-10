@@ -1,6 +1,7 @@
 package org.plugin.worldofmurloc.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
@@ -69,6 +70,38 @@ public class XpSystemCommands {
                                         )
                                 )
                         )
+                        .then(CommandManager.literal("setMana")
+                                .then(CommandManager.argument("target", EntityArgumentType.player())
+                                        .then(CommandManager.argument("amount", FloatArgumentType.floatArg())
+                                                .executes(context -> {
+                                                    ServerPlayerEntity target = EntityArgumentType.getPlayer(context, "target");
+                                                    float amount = FloatArgumentType.getFloat(context, "amount");
+                                                    ModComponents.WOMDATA.get(target).setMana(amount);
+                                                    context.getSource().sendFeedback(() ->
+                                                                    Text.literal("Установлено " + amount + " маны для " + target.getName().getString()),
+                                                            false
+                                                    );
+                                                    return 1;
+                                                })
+                                        )
+                                )
+                        )
+                        .then(CommandManager.literal("setManaSpeed")
+                                .then(CommandManager.argument("target", EntityArgumentType.player())
+                                        .then(CommandManager.argument("amount", FloatArgumentType.floatArg())
+                                                .executes(context -> {
+                                                    ServerPlayerEntity target = EntityArgumentType.getPlayer(context, "target");
+                                                    float amount = FloatArgumentType.getFloat(context, "amount");
+                                                    ModComponents.WOMDATA.get(target).setManaSpeed(amount);
+                                                    context.getSource().sendFeedback(() ->
+                                                                    Text.literal("Установлен " + amount + " множитель маны для " + target.getName().getString()),
+                                                            false
+                                                    );
+                                                    return 1;
+                                                })
+                                        )
+                                )
+                        )
         );
     }
 
@@ -78,8 +111,10 @@ public class XpSystemCommands {
 
         // Формируем информационное сообщение
         Text info = Text.literal("Информация о игроке " + target.getName().getString())
-                .append("\nУровень: " + data.getLvl())
-                .append("\nОпыт: " + data.getXp());
+                .append(String.format("\nУровень: %d", data.getLvl()))
+                .append(String.format("\nОпыт: %d", data.getXp()))
+                .append(String.format("\nМаксимальная манна: %f", data.getMaxMana()))
+                .append(String.format("\n Множитель для манны: %f", data.getManaSpeedMulti()));
 
         source.sendFeedback(() -> info, false);
         return 1;

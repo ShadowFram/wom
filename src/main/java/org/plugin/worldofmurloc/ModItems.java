@@ -46,9 +46,6 @@ public class ModItems {
                         .attributeModifiers(SwordItem.createAttributeModifiers(SilverMaterial.SILVER, 3, -2.4f))),
             "silver_sword");
 
-	public static final Item LIGHTSTICK = register(new LightningStick(new Item.Settings()),
-			"lightstick");
-
 	public static Item register(Item item, String id) {
 		// Create the identifier for the item.
 		Identifier itemID = Identifier.of(Worldofmurloc.MOD_ID, id);
