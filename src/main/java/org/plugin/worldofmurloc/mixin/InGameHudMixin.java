@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(InGameHud.class)
-public class InGameHudMixin {
+public abstract class InGameHudMixin {
     @Shadow
     @Final
     private MinecraftClient client;
@@ -47,8 +47,7 @@ public class InGameHudMixin {
     private void replaceOriginalHealthBar(DrawContext context, PlayerEntity player, int x, int y, int lines, int regeneratingHeartIndex, float maxHealth, int lastHealth, int health, int absorption, boolean blinking, CallbackInfo ci) {
         if (Worldofmurloc.CONFIG.uiType() == ModConfigModel.UI_TYPES.NEW) {
             ci.cancel();
-            float currentHealth = player.getHealth() + 0.5f;
-            ModHud.renderHealthBar(context, client, maxHealth, currentHealth);
+            ModHud.renderHealthBar(context, client.textRenderer, maxHealth, lastHealth);
         }
     }
 
@@ -56,7 +55,7 @@ public class InGameHudMixin {
     private void replaceOriginalFoodBar(DrawContext context, PlayerEntity player, int top, int right, CallbackInfo ci) {
         if (Worldofmurloc.CONFIG.uiType() == ModConfigModel.UI_TYPES.NEW) {
             ci.cancel();
-            ModHud.renderHungerBar(context, client, player.getHungerManager().getFoodLevel() + 0.5f);
+            ModHud.renderHungerBar(context, client.textRenderer, player.getHungerManager().getFoodLevel());
         }
     }
 }

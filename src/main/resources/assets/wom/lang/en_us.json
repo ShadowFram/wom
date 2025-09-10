@@ -1,3 +1,8 @@
 {
-  "item.wom.a": "Suspicious Substance"
+  "item.wom.a": "Suspicious Substance",
+  "text.config.wom-conf.option.abilityOnRight": "Ability bar on right side of screen",
+  "text.config.wom-conf.option.showMcXp": "Show minecraft xp bar when picking up xp orbs",
+  "text.config.wom-conf.option.uiType": "Hud UI type",
+  "text.config.wom-conf.option.uiType.value.new": "New UI",
+  "text.config.wom-conf.option.uiType.value.old": "Old UI"
 }
