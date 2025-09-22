@@ -7,8 +7,8 @@ public class XpHudState {
         xpTimer = 60; // 3 секунды * 20 тиков
     }
     
-    public static boolean shouldShowXp() {
-        return xpTimer > 0;
+    public static boolean shouldShowModXp() {
+        return xpTimer <= 0;
     }
     
     public static void tick() {

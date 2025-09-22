@@ -18,20 +18,21 @@ public class DieForXp {
     public static void register() {
         ServerLivingEntityEvents.ALLOW_DEATH.register((entity, source, amount) -> {
             // Проверяем, что убийца - игрок
-            if (source.getAttacker() instanceof ServerPlayerEntity player) {
+            if (source.getAttacker() instanceof ServerPlayerEntity playerEntity) {
+                var player = ModComponents.WOMDATA.get(playerEntity);
                 // Проверяем теги моба
                 if (entity.getType().isIn(XP10_TAG)) {
-                    XpSystem.addXp(player, 10);
-                    player.sendMessage(Text.literal("+10 XP за убийство ").append(entity.getName()), false);
+                    player.addXp(10);
+                    playerEntity.sendMessage(Text.literal("+10 XP за убийство ").append(entity.getName()), false);
                 }
                 else if (entity.getType().isIn(XP20_TAG)) {
-                    XpSystem.addXp(player, 20);
-                    player.sendMessage(Text.literal("+20 XP за убийство ").append(entity.getName()), false);
+                    player.addXp(20);
+                    playerEntity.sendMessage(Text.literal("+20 XP за убийство ").append(entity.getName()), false);
                 }
                 else {
                     // Стандартное количество XP для мобов без тега
-                    XpSystem.addXp(player, 5);
-                    player.sendMessage(Text.literal("+5 XP за убийство ").append(entity.getName()), false);
+                    player.addXp(5);
+                    playerEntity.sendMessage(Text.literal("+5 XP за убийство ").append(entity.getName()), false);
                 }
             }
             return true; // Разрешаем смерть
